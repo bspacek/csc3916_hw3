@@ -132,7 +132,7 @@ router.route('/Movie')
             if (err) { return res.json({success: false, message: 'Update failed.'})
             }
             Movie.findByIdAndUpdate(result._id, {year: req.body.year})
-            return res.json({success: true, message: 'Update was successful'})
+            return res.json({success: true, message: req.body.year + 'was updated was successful'})
         })
     });
 
