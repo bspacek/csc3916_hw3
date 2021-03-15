@@ -14,6 +14,13 @@ let login_details = {
     password: '123@abc'
 }
 
+let movie_details = {
+    title: 'test title',
+    year: '0000',
+    genre: 'test',
+    actor: 'actor name'
+}
+
 describe('Register, Login and Call Test Collection with Basic Auth and JWT Auth', () => {
    beforeEach((done) => { //Before each test initialize the database to empty
        //db.userList = [];
@@ -48,6 +55,16 @@ describe('Register, Login and Call Test Collection with Basic Auth and JWT Auth'
                         res.body.should.have.property('token');
                         let token = res.body.token;
                         console.log(token);
+                        console.log('Begin saving movie.');
+                        chai.request(server)
+                            .post('/Movies')
+                            .send(movie_details)
+                            .end((err, res) =>{
+                            console.log(JSON.stringify(res.body));
+                            res.should.have.status(200);
+                            res.body.success.should.be.eql(true);
+                            console.log('Movie save finished.');
+                        })
                         done();
                     })
               })

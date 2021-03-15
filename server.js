@@ -12,6 +12,7 @@ var authJwtController = require('./auth_jwt');
 var jwt = require('jsonwebtoken');
 var cors = require('cors');
 var User = require('./Users');
+var Movie = require('./Movies');
 
 
 var app = express();
@@ -86,20 +87,23 @@ router.post('/signin', function (req, res) {
     })
 });
 
-router.route('/Movies')
-    .post(authJwtController.isAuthenticated,function(req, res){
-        if (!req.body.title){
-            res.status(400).send({msg: "Save failed: Must include title."})
+router.post('/Movies', function (req, res) {
+    var movieNew = new Movie();
+    movieNew.title = req.body.title;
+    movieNew.year = req.body.year;
+    movieNew.genre = req.body.genre;
+    movieNew.actor = req.body.actor;
+
+    movieNew.save(function(err){
+        if (!movieNew.title) {
+            return res.json({success:false, message: 'Movie title must be included.'});
         }
-        else {
-            var movie = {
-                title: req.body.title,
-                year: req.body.year,
-                genre: req.body.genre,
-                actor: req.body.actor
-            }
-        }
-    });
+        res.json({success: true, msg: 'Successfully saved new movie.'})
+    })
+
+
+});
+
 
 app.use('/', router);
 app.listen(process.env.PORT || 8080);
