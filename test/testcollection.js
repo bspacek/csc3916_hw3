@@ -16,7 +16,7 @@ let login_details = {
 }
 
 let movie_details = {
-    title: 'test title',
+    title: 'Test Movie',
     year: '0000',
     genre: 'test',
     actor: 'actor name'
@@ -39,6 +39,8 @@ describe('Register, Login and Call Test Collection with Basic Auth and JWT Auth'
     //Test the GET route
     describe('/signup', () => {
         it('it should register, login and check our token', (done) => {
+            /*
+        }
           chai.request(server)
               .post('/signup')
               .send(login_details)
@@ -56,6 +58,8 @@ describe('Register, Login and Call Test Collection with Basic Auth and JWT Auth'
                         let token = res.body.token;
                         console.log(token);
                         console.log('Begin saving movie.');
+
+             */
                         chai.request(server)
                             .post('/Movie')
                             .send(movie_details)
@@ -64,18 +68,22 @@ describe('Register, Login and Call Test Collection with Basic Auth and JWT Auth'
                             res.should.have.status(200);
                             res.body.success.should.be.eql(true);
                             console.log('Movie save finished.');
+
                             chai.request(server)
-                                .delete('/Movie')
+                                .get('/Movie')
+                                .send(movie_details)
                                 .end((err, res) =>{
                                     console.log(JSON.stringify(res.body));
                                     res.should.have.status(200);
                                     res.body.success.should.be.eql(true);
                                     console.log('Movie delete finished.');
                                 })
+
+
                         })
                         done();
-                    })
-              })
+  //                  })
+ //             })
         })
     });
 

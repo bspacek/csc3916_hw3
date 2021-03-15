@@ -97,17 +97,19 @@ router.route('/Movie')
         movieNew.actor = req.body.actor;
 
         movieNew.save(function (err) {
-            if (!movieNew.title) {
-                return res.json({success: false, message: 'Movie title must be included.'});
+            if (!movieNew.title || !movieNew.year || !movieNew.genre || !movieNew.actor) {
+                return res.json({success: false, message: 'All fields must be included to save a new movie.'});
             }
             res.json({success: true, msg: 'Successfully saved new movie.'})
         })
     })
 
-    .get(authJwtController.isAuthenticated, function(req, res) {
-        Movie.find({req}, function(err,movie) {
-            if (err) throw (err);
-            console.log(movie);
+    .get(function(req, res) {
+        var result;
+
+        Movie.findOne({title: req.body.title}, function(err, result) {
+            if (err) throw err;
+            res.json({success: true, query: result})
         })
     })
 
@@ -145,7 +147,8 @@ router.route('/Movie')
             movieUpdate.actor = req.body.actor;
         }
 
-        Movie.findOneAndUpdate({title: req.body.title}, {movieUpdate}, function (err) {
+
+        Movie.findOneAndUpdate({title: req.body.title}, {year: req.body.year}, function (err) {
             if (err) throw err;
         })
 
