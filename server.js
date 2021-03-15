@@ -88,7 +88,7 @@ router.post('/signin', function (req, res) {
 });
 
 router.route('/Movie')
-    .post(function (req, res) {
+    .post(authJwtController.isAuthenticated, function(req, res) {
 
         var movieNew = new Movie();
         movieNew.title = req.body.title;
@@ -104,7 +104,7 @@ router.route('/Movie')
         })
     })
 
-    .get(function (req, res) {
+    .get(authJwtController.isAuthenticated, function(req, res) {
         Movie.find({req}, function(err,movie) {
             if (err) throw (err);
             console.log(movie);
@@ -131,6 +131,23 @@ router.route('/Movie')
     })
 
     .put(function(req, res) {
+        var movieUpdate = new Movie();
+        if (req.body.title) {
+            movieUpdate.title = req.body.title;
+        }
+        if (req.body.year) {
+            movieUpdate.year = req.body.year;
+        }
+        if (req.body.genre) {
+            movieUpdate.genre = req.body.genre;
+        }
+        if (req.body.actor) {
+            movieUpdate.actor = req.body.actor;
+        }
+
+        Movie.findOneAndUpdate({title: req.body.title}, {movieUpdate}, function (err) {
+            if (err) throw err;
+        })
 
     });
 
