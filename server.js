@@ -108,50 +108,33 @@ router.route('/Movie')
         var result;
 
         Movie.findOne({title: req.body.title}, function(err, result) {
-            if (err) throw err;
-            res.json({success: true, query: result})
+            if (err) { throw err;
+            } else {
+                res.json({success:true, query: result}
+                )}
         })
     })
 
     .delete(function(req,res) {
 
-        if (!req.body.title || !req.body.year || !req.body.genre || !req.body.actor) {
-            return res.json({success: false, msg: "Must include something to filter for the delete."})
-        } else {
-
-            var movieDel = new Movie();
-            movieDel.title = req.body.title;
-            movieDel.year = req.body.year;
-            movieDel.genre = req.body.genre;
-            movieDel.actor = req.body.actor;
-
-            Movie.deleteOne({title: req.body.title}, function(err) {
-                if (err) throw err;
-                res.json({success: true, msg: "Movie successfully deleted."})
+        Movie.deleteOne({title: req.body.title}, function(err) {
+            if (err) { throw err;
+            } else {
+                res.json({success:true, msg: req.body.title + " was deleted from the database."}
+                )}
             })
-        }
     })
 
     .put(function(req, res) {
-        var movieUpdate = new Movie();
-        if (req.body.title) {
-            movieUpdate.title = req.body.title;
-        }
-        if (req.body.year) {
-            movieUpdate.year = req.body.year;
-        }
-        if (req.body.genre) {
-            movieUpdate.genre = req.body.genre;
-        }
-        if (req.body.actor) {
-            movieUpdate.actor = req.body.actor;
-        }
 
 
-        Movie.findOneAndUpdate({title: req.body.title}, {year: req.body.year}, function (err) {
-            if (err) throw err;
+        Movie.findOne({title: req.body.title}, function(err, result) {
+            if (err) { throw err;
+            } else {
+                Movie.findByIdAndUpdate(result._id, {title:req.body.title, year: req.body.year, genre:req.body.genre })
+                res.json({success:true, query: result}
+                )}
         })
-
     });
 
 
