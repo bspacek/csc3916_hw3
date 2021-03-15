@@ -65,7 +65,7 @@ describe('Register, Login and Call Test Collection with Basic Auth and JWT Auth'
                             res.body.success.should.be.eql(true);
                             console.log('Movie save finished.');
                             chai.request(server)
-                                .get('/Movie')
+                                .delete('/Movie')
                                 .end((err, res) =>{
                                     console.log(JSON.stringify(res.body));
                                     res.should.have.status(200);

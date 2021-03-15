@@ -112,14 +112,22 @@ router.route('/Movie')
     })
 
     .delete(function(req,res) {
-        Movie.find({title: 'test title'}, function (err, movie) {
-            if (err) throw (err);
 
-            Movie.remove(function(err) {
-                if (err) throw (err);
-                console.log('Deleted');
+        if (!req.body.title || !req.body.year || !req.body.genre || !req.body.actor) {
+            return res.json({success: false, msg: "Must include something to filter for the delete."})
+        } else {
+
+            var movieDel = new Movie();
+            movieDel.title = req.body.title;
+            movieDel.year = req.body.year;
+            movieDel.genre = req.body.genre;
+            movieDel.actor = req.body.actor;
+
+            Movie.deleteOne({title: req.body.title}, function(err) {
+                if (err) throw err;
+                res.json({success: true, msg: "Movie successfully deleted."})
             })
-        })
+        }
     })
 
     .put(function(req, res) {
@@ -127,26 +135,6 @@ router.route('/Movie')
     });
 
 
-
-/*
-router.post('/Movie', function (req, res) {
-    var movieNew = new Movie();
-    movieNew.title = req.body.title;
-    movieNew.year = req.body.year;
-    movieNew.genre = req.body.genre;
-    movieNew.actor = req.body.actor;
-
-    movieNew.save(function(err){
-        if (!movieNew.title) {
-            return res.json({success:false, message: 'Movie title must be included.'});
-        }
-        res.json({success: true, msg: 'Successfully saved new movie.'})
-    })
-
-
-});
-
- */
 
 
 app.use('/', router);
