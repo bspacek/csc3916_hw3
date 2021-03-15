@@ -87,7 +87,49 @@ router.post('/signin', function (req, res) {
     })
 });
 
-router.post('/Movies', function (req, res) {
+router.route('/Movie')
+    .post(function (req, res) {
+
+        var movieNew = new Movie();
+        movieNew.title = req.body.title;
+        movieNew.year = req.body.year;
+        movieNew.genre = req.body.genre;
+        movieNew.actor = req.body.actor;
+
+        movieNew.save(function (err) {
+            if (!movieNew.title) {
+                return res.json({success: false, message: 'Movie title must be included.'});
+            }
+            res.json({success: true, msg: 'Successfully saved new movie.'})
+        })
+    })
+
+    .get(function (req, res) {
+        Movie.find({req}, function(err,movie) {
+            if (err) throw (err);
+            console.log(movie);
+        })
+    })
+
+    .delete(function(req,res) {
+        Movie.find({title: 'test title'}, function (err, movie) {
+            if (err) throw (err);
+
+            Movie.remove(function(err) {
+                if (err) throw (err);
+                console.log('Deleted');
+            })
+        })
+    })
+
+    .put(function(req, res) {
+
+    });
+
+
+
+/*
+router.post('/Movie', function (req, res) {
     var movieNew = new Movie();
     movieNew.title = req.body.title;
     movieNew.year = req.body.year;
@@ -103,6 +145,8 @@ router.post('/Movies', function (req, res) {
 
 
 });
+
+ */
 
 
 app.use('/', router);

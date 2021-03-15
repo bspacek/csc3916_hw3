@@ -4,6 +4,7 @@ let chai = require('chai');
 let chaiHttp = require('chai-http');
 let server = require('../server');
 let User = require('../Users');
+let Movie = require('../Movies');
 chai.should();
 
 chai.use(chaiHttp);
@@ -33,7 +34,6 @@ describe('Register, Login and Call Test Collection with Basic Auth and JWT Auth'
         User.deleteOne({ name: 'test'}, function(err, user) {
             if (err) throw err;
         });
-        done();
     })
 
     //Test the GET route
@@ -57,13 +57,21 @@ describe('Register, Login and Call Test Collection with Basic Auth and JWT Auth'
                         console.log(token);
                         console.log('Begin saving movie.');
                         chai.request(server)
-                            .post('/Movies')
+                            .post('/Movie')
                             .send(movie_details)
                             .end((err, res) =>{
                             console.log(JSON.stringify(res.body));
                             res.should.have.status(200);
                             res.body.success.should.be.eql(true);
                             console.log('Movie save finished.');
+                            chai.request(server)
+                                .get('/Movie')
+                                .end((err, res) =>{
+                                    console.log(JSON.stringify(res.body));
+                                    res.should.have.status(200);
+                                    res.body.success.should.be.eql(true);
+                                    console.log('Movie delete finished.');
+                                })
                         })
                         done();
                     })
