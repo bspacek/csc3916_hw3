@@ -86,6 +86,21 @@ router.post('/signin', function (req, res) {
     })
 });
 
+router.route('/Movies')
+    .post(authJwtController.isAuthenticated,function(req, res){
+        if (!req.body.title){
+            res.status(400).send({msg: "Save failed: Must include title."})
+        }
+        else {
+            var movie = {
+                title: req.body.title,
+                year: req.body.year,
+                genre: req.body.genre,
+                actor: req.body.actor
+            }
+        }
+    });
+
 app.use('/', router);
 app.listen(process.env.PORT || 8080);
 module.exports = app; // for testing only
