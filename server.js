@@ -129,11 +129,10 @@ router.route('/Movie')
 
 
         Movie.findOne({title: req.body.title}, function(err, result) {
-            if (err) { throw err;
-            } else {
-                Movie.findByIdAndUpdate(result._id, {title:req.body.title, year: req.body.year, genre:req.body.genre }, null , function (err, update))
-                res.json({success:true, msg: req.body.title + " has been updated."}
-                )}
+            if (err) { return res.json({success: false, message: 'Update failed.'})
+            }
+            Movie.findByIdAndUpdate(result._id, {year: req.body.year})
+            return res.json({success: true, message: 'Update was successful'})
         })
     });
 
