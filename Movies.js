@@ -17,7 +17,7 @@ var MovieSchema = new Schema({
     title: {type: String, Required: true},
     year: {type: String, Required: true},
     genre: {type: String, Required: true},
-    actor: {type: String, Required: true}
+    actor: [{type: String, Required: true}]
 
 });
 

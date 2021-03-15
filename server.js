@@ -88,7 +88,7 @@ router.post('/signin', function (req, res) {
 });
 
 router.route('/Movie')
-    .post(authJwtController.isAuthenticated, function(req, res) {
+    .post( function(req, res) {
 
         var movieNew = new Movie();
         movieNew.title = req.body.title;
@@ -112,7 +112,9 @@ router.route('/Movie')
             } else {
                 res.json({success:true, query: result}
                 )}
+            console.log(result);
         })
+
     })
 
     .delete(function(req,res) {
@@ -126,7 +128,6 @@ router.route('/Movie')
     })
 
     .put(function(req, res) {
-
 
         Movie.findOneAndUpdate({title: req.body.title}, {year: req.body.year, genre: req.body.genre}, {new: true}, function(err, data) {
             if (err) { return res.json({success: false, message: 'Update failed.'})
