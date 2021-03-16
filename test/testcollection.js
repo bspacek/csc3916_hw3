@@ -64,12 +64,11 @@ describe('Register, Login and Call Test Collection with Basic Auth and JWT Auth'
                             .send(movie_details)
                             .end((err, res) =>{
                             console.log(JSON.stringify(res.body));
-                            res.should.have.status(200);
-                            res.body.success.should.be.eql(true);
+
                             console.log('Movie save finished.');
 
                             chai.request(server)
-                                .get('/Movie')
+                                .get('/allMovies')
                                 .send(movie_details)
                                 .end((err, res) =>{
                                     console.log(JSON.stringify(res.body));

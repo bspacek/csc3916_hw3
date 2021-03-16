@@ -87,11 +87,21 @@ router.post('/signin', function (req, res) {
     })
 });
 
-router.get('allmovies', function (req, res) {
-    Movie.find({}, function (err, movie){
-        return res.json({success: true, query: movie})
+router.route('/allMovies')
+    .get(authJwtController.isAuthenticated, function(req,res){
+        Movie.find({}, function (err, movie){
+            return res.json({success: true, query: movie})
+        })
     })
-});
+    .delete(authJwtController.isAuthenticated, function (req, res) {
+
+        Movie.deleteMany({}, function(err, data) {
+            if (!data) { return res.json({success: false, message: 'No movies deleted.'});
+            } else {
+                return res.json({success:true, msg: "All data was deleted from the database."}
+                )}
+        })
+    });
 
 router.route('/Movie')
     .post(authJwtController.isAuthenticated, function (req, res) {
