@@ -87,6 +87,12 @@ router.post('/signin', function (req, res) {
     })
 });
 
+router.get('allmovies', function (req, res) {
+    Movie.find({}, function (err, movie){
+        return res.json({success: true, query: movie})
+    })
+});
+
 router.route('/Movie')
     .post(authJwtController.isAuthenticated, function (req, res) {
 
