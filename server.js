@@ -100,19 +100,17 @@ router.route('/Movie')
             if (!movieNew.title || !movieNew.year || !movieNew.genre || !movieNew.actor) {
                 return res.json({success: false, message: 'All fields must be included to save a new movie.'});
             }
-            res.json({success: true, msg: 'Successfully saved new movie.'})
+            return res.json({success: true, msg: 'Successfully saved new movie.'})
         })
     })
 
     .get(function(req, res) {
-        var result;
 
         Movie.findOne({title: req.body.title}, function(err, result) {
-            if (err) { throw err;
+            if (err) { return res.json({success: false, message: 'Movie not found.'});
             } else {
-                res.json({success:true, query: result}
+                return res.json({success:true, query: result}
                 )}
-            console.log(result);
         })
 
     })
@@ -120,16 +118,16 @@ router.route('/Movie')
     .delete(function(req,res) {
 
         Movie.deleteOne({title: req.body.title}, function(err) {
-            if (err) { throw err;
+            if (err) { return res.json({success: false, message: 'Movie not found.'});
             } else {
-                res.json({success:true, msg: req.body.title + " was deleted from the database."}
+                return res.json({success:true, msg: req.body.title + " was deleted from the database."}
                 )}
             })
     })
 
     .put(function(req, res) {
 
-        Movie.findOneAndUpdate({title: req.body.title}, {year: req.body.year, genre: req.body.genre}, {new: true}, function(err, data) {
+        Movie.findOneAndUpdate({title: req.body.title}, {year: req.body.year, genre: req.body.genre, actor: [req.body.actor]}, {new: true}, function(err, data) {
             if (err) { return res.json({success: false, message: 'Update failed.'})
             }
             return res.json({success: true, message: req.body + 'was updated was successfully to ' + data})
