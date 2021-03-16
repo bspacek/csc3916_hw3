@@ -93,15 +93,12 @@ router.route('/allMovies')
             return res.json({success: true, query: movie})
         })
     })
-    .delete(authJwtController.isAuthenticated, function (req, res) {
-
-        Movie.remove({}, function(err, data) {
-            if (!data) { return res.json({success: false, message: 'No movies deleted.'});
-            } else {
-                return res.json({success:true, msg: "All data was deleted from the database."}
-                )}
+    .delete(authJwtController.isAuthenticated, function (req, res){
+        Movie.deleteMany({}, function (err) {
+            return res.json({success: true, msg: "All data was deleted."})
         })
     });
+
 
 router.route('/Movie')
     .post(authJwtController.isAuthenticated, function (req, res) {
