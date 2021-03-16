@@ -106,7 +106,7 @@ router.route('/Movie')
 
     .get(authJwtController.isAuthenticated, function (req, res) {
 
-        Movie.find({title: req.body.title}, function(err, result) {
+        Movie.findOne({title: req.body.title}, function(err, result) {
             if (!result) { return res.json({success: false, message: 'Movie not found.'});
             } else {
                 return res.json({success:true, query: result}
