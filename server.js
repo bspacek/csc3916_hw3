@@ -95,7 +95,7 @@ router.route('/allMovies')
     })
     .delete(authJwtController.isAuthenticated, function (req, res) {
 
-        Movie.deleteMany({}, function(err, data) {
+        Movie.remove({}, function(err, data) {
             if (!data) { return res.json({success: false, message: 'No movies deleted.'});
             } else {
                 return res.json({success:true, msg: "All data was deleted from the database."}
