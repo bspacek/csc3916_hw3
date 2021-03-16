@@ -88,7 +88,7 @@ router.post('/signin', function (req, res) {
 });
 
 router.route('/Movie')
-    .post( function(req, res) {
+    .post(authJwtController.isAuthenticated, function (req, res) {
 
         var movieNew = new Movie();
         movieNew.title = req.body.title;
@@ -104,7 +104,7 @@ router.route('/Movie')
         })
     })
 
-    .get(function(req, res) {
+    .get(authJwtController.isAuthenticated, function (req, res) {
 
         Movie.findOne({title: req.body.title}, function(err, result) {
             if (err) { return res.json({success: false, message: 'Movie not found.'});
@@ -115,9 +115,9 @@ router.route('/Movie')
 
     })
 
-    .delete(function(req,res) {
+    .delete(authJwtController.isAuthenticated, function (req, res) {
 
-        Movie.deleteOne({title: req.body.title}, function(err) {
+        Movie.findOneAndDelete({title: req.body.title}, function(err) {
             if (err) { return res.json({success: false, message: 'Movie not found.'});
             } else {
                 return res.json({success:true, msg: req.body.title + " was deleted from the database."}
@@ -125,9 +125,9 @@ router.route('/Movie')
             })
     })
 
-    .put(function(req, res) {
+    .put(authJwtController.isAuthenticated, function (req, res) {
 
-        Movie.findOneAndUpdate({title: req.body.title}, {year: req.body.year, genre: req.body.genre, actor: [req.body.actor]}, {new: true}, function(err, data) {
+        Movie.findOneAndUpdate({title: req.body.title}, {year: req.body.year, genre: req.body.genre, actor: req.body.actor}, {new: true}, function(err, data) {
             if (err) { return res.json({success: false, message: 'Update failed.'})
             }
             return res.json({success: true, message: req.body + 'was updated was successfully to ' + data})
