@@ -1,3 +1,5 @@
+let envPath = __dirname + "/../.env"
+require('dotenv').config({path:envPath});
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var bcrypt = require('bcrypt-nodejs');
@@ -42,6 +44,6 @@ UserSchema.methods.comparePassword = function (password, callback) {
         callback(isMatch);
     })
 }
-
+//
 //return the model to server
 module.exports = mongoose.model('User', UserSchema);
